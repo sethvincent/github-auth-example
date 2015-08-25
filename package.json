@@ -1,0 +1,21 @@
+{
+  "name": "github-auth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "bundle": "browserify index.js -t [ envify --NODE_ENV production ] -o  assets/bundle.js",
+    "start": "budo index.js:bundle.js --live -- -t [ envify --NODE_ENV development ]"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "browserify": "^11.0.1",
+    "budo": "^4.2.1",
+    "envify": "^3.4.0"
+  },
+  "dependencies": {
+    "github-api": "^0.10.6",
+    "xhr": "^2.0.4"
+  }
+}
