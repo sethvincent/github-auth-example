@@ -1,17 +1,22 @@
 var xhr = require('xhr')
 var qs = require('querystring')
+var cookie = require('cookie-cutter')
 var config = require('./config')
 
 start()
 
 function start () {
   var code = getCode()
+  var token = cookie.get('github-auth-example')
 
-  if (code) {
+  if (token) {
+    getProfile(token, function (err, profile) {
+      renderProfile(profile)
+    })
+  } else if (code) {
     getToken(code, function (err, token) {
-      getProfile(token, function (err, profile) {
-        renderProfile(profile)
-      })
+      cookie.set('github-auth-example', token)
+      window.location = window.location.origin
     })
   } else {
     renderLink()
@@ -22,6 +27,17 @@ function renderProfile (profile) {
   var p = document.createElement('p')
   p.innerHTML = profile.name
   document.body.appendChild(p)
+
+  var logout = document.createElement('a')
+  logout.href = '#'
+  logout.innerHTML = 'log out'
+  document.body.appendChild(logout)
+
+  logout.addEventListener('click', function (e) {
+    e.preventDefault()
+    cookie.set('github-auth-example', '')
+    window.location = window.location
+  })
 }
 
 function getProfile (token, callback) {
